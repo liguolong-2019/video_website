@@ -2,5 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqupt.demo.Dao.AdminDao">
-
+<select id="adlogin" resultType="Admin">
+    select * from demo.admin where admin_name=#{adminName} and password=#{password};
+</select>
 </mapper>

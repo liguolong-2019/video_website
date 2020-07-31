@@ -4,25 +4,26 @@ public class Movie {
     private Integer movieId;
     private String movieName;
     private String src;
-    private Admin admin;
+    private Integer adminId;
 
+    public Movie(Integer movieId, String movieName, String src, Integer adminId) {
+        this.movieId = movieId;
+        this.movieName = movieName;
+        this.src = src;
+        this.adminId = adminId;
+    }
 
     public Movie() {
 
     }
-    public Movie(Integer movieId, String movieName, String src, Admin admin) {
-        this.movieId = movieId;
-        this.movieName = movieName;
-        this.src = src;
-        this.admin = admin;
+
+
+    public Integer getAdminId() {
+        return adminId;
     }
 
-    public Admin getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
+    public void setAdminId(Integer adminId) {
+        this.adminId = adminId;
     }
 
     public Integer getMovieId() {
