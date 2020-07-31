@@ -5,4 +5,7 @@
 <select id="queryAll" resultType="User">
     select * from demo.user;
 </select>
+    <select id="login" resultType="User">
+        select * from demo.user where user_name=#{userName} and password=#{password};
+    </select>
 </mapper>

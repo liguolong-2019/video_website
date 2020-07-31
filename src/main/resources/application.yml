@@ -1,7 +1,6 @@
 server:
   port: 8080
-  servlet:
-    context-path: /demo
+
 
 mybatis:
   type-aliases-package: com.cqupt.demo
@@ -12,8 +11,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/demo?useSSL=false&serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: AaAa123!
+    username: liguolong
+    password: 1234
     initialization-mode: always
 
 
