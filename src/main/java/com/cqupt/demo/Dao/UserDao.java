@@ -7,5 +7,9 @@ import java.util.List;
 
 @Mapper
 public interface UserDao {
-    List<User> queryAll();
+    List<User> selectAll();
+
+    int insertUser(User user);
+
+    User selectUser(String userName);
 }

@@ -3,4 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqupt.demo.Dao.AdminDao">
 
+    <select id="selectByName" parameterType="String" resultType="Admin">
+        select * from demo.admin where admin_name=#{adminName}
+    </select>
+
+    <insert id="insertAdmin" parameterType="Admin" useGeneratedKeys="true" keyProperty="adminId" keyColumn="admin_id">
+        insert into demo.admin(admin_name, password)
+        values(#{adminName},#{password})
+    </insert>
 </mapper>
