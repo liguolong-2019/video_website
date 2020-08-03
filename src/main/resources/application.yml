@@ -13,7 +13,7 @@ spring:
     password: AaAa123!
     initialization-mode: always
   mail:
-    username: 1437927944@qq.com
-    password: jblxpnduhxgliigh
+    username: 发送邮箱
+    password: 授权码
     host: smtp.qq.com
 
