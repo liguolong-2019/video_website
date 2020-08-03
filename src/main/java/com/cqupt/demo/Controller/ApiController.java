@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cqupt.demo.Service.AdminService;
 import com.cqupt.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,11 +22,13 @@ public class ApiController {
     @Autowired
     AdminService adminService;
     @PostMapping("/login")
-    public JSONObject login(@RequestParam String userName, @RequestParam String password, HttpSession session){
+    public JSONObject login(@RequestParam String userName, @RequestParam String password, HttpServletRequest request){
+        HttpSession session = request.getSession(true);
         return userService.login(userName, password, session);
     }
     @PostMapping("/adlogin")
-    public JSONObject adlogin(@RequestParam String adminName, @RequestParam String password, HttpSession session){
+    public JSONObject adlogin(@RequestParam String adminName, @RequestParam String password, HttpServletRequest request){
+        HttpSession session = request.getSession(true);
         return adminService.adlogin(adminName, password, session);
     }
 }

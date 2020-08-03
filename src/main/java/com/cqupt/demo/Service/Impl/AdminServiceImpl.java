@@ -23,7 +23,7 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject adlogin(String userName, String password, HttpSession session) {
         boolean success;
         JSONObject result=new JSONObject();
-        JSONObject adminInfo=new JSONObject();
+        JSONObject dataJ=new JSONObject();
         List<Movie> movies=new ArrayList<>();
         Admin loginAdmin = adminDao.adlogin(userName, password);
         if (loginAdmin==null){
@@ -35,9 +35,10 @@ public class AdminServiceImpl implements AdminService {
             movies=movieDao.queryBy_Adid(loginAdmin.getAdminId());
 
         }
+        dataJ.put("admin",loginAdmin);
+        dataJ.put("movieList",movies);
         result.put("success",success);
-        result.put("data",loginAdmin);
-        result.put("movieList",movies);
+        result.put("data",dataJ);
         return result;
     }
 }
