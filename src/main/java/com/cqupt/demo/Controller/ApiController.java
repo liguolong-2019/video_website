@@ -1,6 +1,7 @@
 package com.cqupt.demo.Controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.cqupt.demo.Bean.Admin;
 import com.cqupt.demo.Bean.User;
 import com.cqupt.demo.Service.AdminService;
@@ -9,13 +10,11 @@ import com.cqupt.demo.utils.UserUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,5 +79,16 @@ public class ApiController {
 
         return modelMap;
 
+    }
+
+    @PostMapping("/login")
+    public JSONObject login(@RequestParam String userName, @RequestParam String password, HttpServletRequest request){
+        HttpSession session = request.getSession(true);
+        return userService.login(userName, password, session);
+    }
+    @PostMapping("/adlogin")
+    public JSONObject adlogin(@RequestParam String adminName, @RequestParam String password, HttpServletRequest request){
+        HttpSession session = request.getSession(true);
+        return adminService.adlogin(adminName, password, session);
     }
 }
