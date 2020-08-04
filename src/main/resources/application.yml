@@ -14,8 +14,8 @@ spring:
     initialization-mode: always
 
   mail:
-    username: 1437927944@qq.com
-    password: xdbwwahbsrncgaaj
+    username: 发送邮件邮箱
+    password: 授权码
     host: smtp.qq.com
   servlet:
     multipart:
