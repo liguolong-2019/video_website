@@ -9,4 +9,10 @@ import java.util.List;
 @Mapper
 public interface MovieDao {
     List<Movie> queryBy_Adid(@Param("adminId")Integer adminId);
+
+    Movie queryById(@Param("movieId") Integer movieId);
+
+    int insertMovie(Movie movie);
+
+    int deleteMovie(@Param("movieId") Integer movieId);
 }

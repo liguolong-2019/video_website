@@ -9,11 +9,14 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/demo?useSSL=false&serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf-8
-    username: liguolong
-    password: 1234
+    username: root
+    password: AaAa123!
     initialization-mode: always
   mail:
-    username: 发送邮箱
-    password: 授权码
+    username: 1437927944@qq.com
+    password: xdbwwahbsrncgaaj
     host: smtp.qq.com
-
+  servlet:
+    multipart:
+      max-file-size: 5GB
+      max-request-size: 5GB

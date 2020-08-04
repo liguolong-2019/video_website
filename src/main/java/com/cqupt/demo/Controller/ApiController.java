@@ -3,20 +3,28 @@ package com.cqupt.demo.Controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cqupt.demo.Bean.Admin;
+import com.cqupt.demo.Bean.Movie;
 import com.cqupt.demo.Bean.User;
 import com.cqupt.demo.Service.AdminService;
+import com.cqupt.demo.Service.MovieService;
 import com.cqupt.demo.Service.UserService;
+import com.cqupt.demo.utils.PathUtil;
 import com.cqupt.demo.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,6 +33,9 @@ public class ApiController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private MovieService movieService;
 
     @Resource
     private AdminService adminService;
@@ -143,5 +154,100 @@ public class ApiController {
     public JSONObject editing(@RequestBody User user ){
         JSONObject editing = userService.editing(user);
         return editing;
+    }
+
+    /**
+     * 上传影片
+     * @param file
+     * @param movieName
+     * @param session
+     * @return
+     */
+    @PostMapping("/upload")
+    public Map<String, Object> addMovie(@RequestParam("file") MultipartFile file, @RequestParam("movieName") String movieName, HttpSession session) {
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+//        Admin admin = (Admin) session.getAttribute("loginAdmin");
+        Admin admin = new Admin(2,"z","123456");
+        if (!file.isEmpty() && movieName != null) {
+            Movie movie = new Movie();
+            String basePath = PathUtil.getMovieBasePath();
+            StringBuilder builder = new StringBuilder(file.getOriginalFilename());
+            String suffix = builder.substring(builder.indexOf("."));
+            String fileName = PathUtil.getRandomFileName(suffix);
+            movie.setMovieName(movieName);
+            movie.setAdminId(admin.getAdminId());
+            movie.setSrc(basePath + fileName);
+            File filepath = new File(basePath, fileName);
+            if (!filepath.exists()) {
+                filepath.getParentFile().mkdirs();
+            }
+            File file1 = new File(basePath + File.separator + fileName);
+            try {
+                file.transferTo(file1);
+                movieService.addMovie(movie);
+                List<Movie> movies = movieService.queryBy_Adid(admin.getAdminId());
+                modelMap.put("movieList", movies);
+                modelMap.put("Msg", "上传成功");
+                modelMap.put("success", true);
+            } catch (IOException e) {
+                modelMap.put("Msg", "文件上传失败");
+                modelMap.put("success", false);
+            }
+        } else {
+            modelMap.put("Msg", "上传失败");
+            modelMap.put("success", false);
+        }
+
+        return modelMap;
+    }
+
+    /**
+     * 删除影片
+     * @param movieId
+     * @return
+     */
+    @GetMapping("/delete")
+    public Map<String, Object> delMovie(@RequestParam("movieId") Integer movieId) {
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        Movie movie = movieService.getById(movieId);
+        File file = new File(movie.getSrc());
+        Boolean flag=file.delete();
+        int removeMovie = movieService.removeMovie(movieId);
+        if (removeMovie == 1&&flag) {
+            modelMap.put("Msg", "删除成功");
+            modelMap.put("success", true);
+        }else {
+            modelMap.put("Msg", "删除失败");
+            modelMap.put("success", false);
+        }
+        return modelMap;
+    }
+
+
+    /**
+     * 获取所有影片
+     * @param session
+     * @return
+     */
+    @GetMapping("/movies")
+    public Map<String, Object> getMovies(HttpSession session) {
+//        Admin admin = (Admin) session.getAttribute("loginAdmin");
+        Admin admin=new Admin(2,"dxy","123456");
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        List<Movie> movies = new ArrayList<Movie>();
+        try {
+            movies = movieService.queryBy_Adid(admin.getAdminId());
+            Map<String, Object> temp = new HashMap<String, Object>();
+            temp.put("movieList", movies);
+            modelMap.put("success", true);
+            modelMap.put("data", temp);
+        } catch (Exception e) {
+            modelMap.put("success", false);
+            modelMap.put("errMsg", e.getMessage());
+        }
+
+        return modelMap;
+
+
     }
 }
