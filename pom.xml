@@ -101,7 +101,6 @@
                     <source>6</source>
                     <target>6</target>
                 </configuration>
-
             </plugin>
         </plugins>
     </build>

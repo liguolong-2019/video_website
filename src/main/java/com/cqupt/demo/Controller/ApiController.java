@@ -121,4 +121,27 @@ public class ApiController {
         HttpSession session = request.getSession(true);
         return adminService.adlogin(adminName, password, session);
     }
+
+
+    /**
+     * 请求修改用户资料
+     * @param userId
+     * @return
+     */
+    @GetMapping("/editor")
+    public JSONObject editor(@RequestParam Integer userId){
+        JSONObject editor = userService.editor(userId);
+        return editor;
+    }
+
+    /**
+     * 提交修改资料
+     * @param user
+     * @return
+     */
+    @PostMapping("/editing")
+    public JSONObject editing(@RequestBody User user ){
+        JSONObject editing = userService.editing(user);
+        return editing;
+    }
 }

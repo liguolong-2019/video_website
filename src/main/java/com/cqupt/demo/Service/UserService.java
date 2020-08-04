@@ -12,4 +12,8 @@ public interface UserService {
     User queryUser(String userName);
 
     JSONObject login(String userName, String password, HttpSession session);
+
+    JSONObject editor(Integer userId);
+
+    JSONObject editing(User user);
 }

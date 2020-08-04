@@ -21,4 +21,13 @@ class DemoApplicationTests {
         System.out.println(i);
     }
 
+    @Test
+    void update(){
+        User user1 = userDao.selectUserById(2);
+        user1.setAge(100);
+        user1.setEmail("2874277576@qq.com");
+        user1.setUserName("lalal");
+        int i = userDao.updateUserInfoByName(user1);
+        System.out.println(i);
+    }
 }

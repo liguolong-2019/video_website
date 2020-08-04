@@ -15,4 +15,8 @@ public interface UserDao {
     User selectUser(String userName);
 
     User login(@Param("userName")String userName, @Param("password")String password);
+
+    User selectUserById(@Param("userId") Integer userId);
+
+    int updateUserInfoByName(User user);
 }
