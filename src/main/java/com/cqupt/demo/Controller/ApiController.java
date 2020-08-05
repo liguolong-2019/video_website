@@ -108,27 +108,29 @@ public class ApiController {
     }
 
     /**
-     * 普通用户登陆
-     * @param userName
-     * @param password
+     * 普通用户登录
+     * @param map
      * @param request
      * @return
      */
     @PostMapping("/login")
-    public JSONObject login(@RequestParam String userName, @RequestParam String password, HttpServletRequest request){
+    public JSONObject login( @RequestBody Map map ,HttpServletRequest request){
+        String userName = (String) map.get("userName");
+        String password = (String) map.get("password");
         HttpSession session = request.getSession(true);
         return userService.login(userName, password, session);
     }
 
     /**
-     * 管理员用户登陆
-     * @param adminName
-     * @param password
+     * 管理员用户登录
+     * @param map
      * @param request
      * @return
      */
     @PostMapping("/adlogin")
-    public JSONObject adlogin(@RequestParam String adminName, @RequestParam String password, HttpServletRequest request){
+    public JSONObject adlogin(@RequestBody Map map, HttpServletRequest request){
+        String  adminName = (String) map.get("adminName");
+        String  password= (String) map.get("password");
         HttpSession session = request.getSession(true);
         return adminService.adlogin(adminName, password, session);
     }
