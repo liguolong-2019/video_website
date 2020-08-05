@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class mvcConfiger implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new loginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns("/api/login","/api/adlogin","/error/**");
+        registry.addInterceptor(new loginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns("/api/login","/api/adlogin","/error/**","/api/user","/api/admin");
         registry.addInterceptor(new powerHanlerInterceptor()).addPathPatterns("/api/upload","/api/delete");
     }
 }

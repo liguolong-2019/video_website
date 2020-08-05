@@ -6,17 +6,26 @@ public class Room {
     private Movie movie;
     private User user;
     private String password;
+    private String type;
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public Room() {
 
     }
-    public Room(Integer roomId, String roomName, Movie movie, User user, String password) {
+    public Room(Integer roomId, String roomName, Movie movie, User user, String password,String type) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.movie = movie;
         this.user = user;
         this.password = password;
+        this.type=type;
     }
 
     public Integer getRoomId() {
