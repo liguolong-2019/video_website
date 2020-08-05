@@ -20,7 +20,7 @@ public class PathUtil {
         if (os.toLowerCase().startsWith("win")) {
             basePath = "C:/prodev/movie/";
         }else{
-            basePath = "/home/ray/movie";
+            basePath = "/home/ray/movie/";
         }
 
         basePath = basePath.replace("/", seperator);
