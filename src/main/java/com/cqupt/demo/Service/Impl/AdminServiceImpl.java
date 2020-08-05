@@ -34,21 +34,25 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public JSONObject adlogin(String userName, String password, HttpSession session) {
         boolean success;
+        String Msg;
         JSONObject result=new JSONObject();
         JSONObject dataJ=new JSONObject();
         List<Movie> movies=new ArrayList<Movie>();
         Admin loginAdmin = adminDao.adlogin(userName, password);
         if (loginAdmin==null){
             success=false;
+            Msg="用户名或密码错误";
         }
         else {
             success=true;
+            Msg="登录成功";
             session.setAttribute("loginAdmin",loginAdmin);
             movies=movieDao.queryBy_Adid(loginAdmin.getAdminId());
 
         }
         dataJ.put("admin",loginAdmin);
         dataJ.put("movieList",movies);
+        result.put("Msg",Msg);
         result.put("success",success);
         result.put("data",dataJ);
         return result;
