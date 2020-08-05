@@ -168,8 +168,8 @@ public class ApiController {
     @PostMapping("/upload")
     public Map<String, Object> addMovie(@RequestParam("file") MultipartFile file, @RequestParam("movieName") String movieName, HttpSession session) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
-//        Admin admin = (Admin) session.getAttribute("loginAdmin");
-        Admin admin = new Admin(2,"z","123456");
+       Admin admin = (Admin) session.getAttribute("loginAdmin");
+//         Admin admin = new Admin(2,"z","123456");
         if (!file.isEmpty() && movieName != null) {
             Movie movie = new Movie();
             String basePath = PathUtil.getMovieBasePath();
@@ -213,9 +213,9 @@ public class ApiController {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         Movie movie = movieService.getById(movieId);
         File file = new File(movie.getSrc());
-        Boolean flag=file.delete();
+        file.delete();
         int removeMovie = movieService.removeMovie(movieId);
-        if (removeMovie == 1&&flag) {
+        if (removeMovie == 1) {
             modelMap.put("Msg", "删除成功");
             modelMap.put("success", true);
         }else {
@@ -233,8 +233,8 @@ public class ApiController {
      */
     @GetMapping("/movies")
     public Map<String, Object> getMovies(HttpSession session) {
-//        Admin admin = (Admin) session.getAttribute("loginAdmin");
-        Admin admin=new Admin(2,"dxy","123456");
+       Admin admin = (Admin) session.getAttribute("loginAdmin");
+//         Admin admin=new Admin(2,"dxy","123456");
         Map<String, Object> modelMap = new HashMap<String, Object>();
         List<Movie> movies = new ArrayList<Movie>();
         try {
