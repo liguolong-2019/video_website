@@ -3,4 +3,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqupt.demo.Dao.RoomDao">
 
+    <insert id="creatPublicRoom">
+        insert into demo.room(room_name,movie_id,user_id,type)
+        values (#{roomName},#{movieId},#{userId},'公共')
+    </insert>
+    <select id="queryRoomByName" resultType="Room">
+        select * from demo.room where room_name=#{roomName}
+    </select>
+    <select id="queryRoomById" resultType="Room">
+        select * from demo.room where room_id=#{roomId};
+    </select>
+    <select id="allRooms" resultType="Room">
+        select * from demo.room
+    </select>
+
+
 </mapper>

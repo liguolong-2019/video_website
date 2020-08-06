@@ -1,6 +1,8 @@
 package com.cqupt.demo;
 
+import com.cqupt.demo.Bean.Room;
 import com.cqupt.demo.Bean.User;
+import com.cqupt.demo.Dao.RoomDao;
 import com.cqupt.demo.Dao.UserDao;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
@@ -14,6 +16,8 @@ class DemoApplicationTests {
 
     @Resource
     private UserDao userDao;
+    @Resource
+    private RoomDao roomDao;
     @Test
     void contextLoads() {
         System.out.println(userDao.selectAll());
@@ -29,5 +33,12 @@ class DemoApplicationTests {
         user1.setUserName("lalal");
         int i = userDao.updateUserInfoByName(user1);
         System.out.println(i);
+    }
+
+    @Test
+    void da(){
+       // roomDao.creatPublicRoom("liguolong",2,3);
+        Room aaa = roomDao.queryRoomByName("aaa");
+        System.out.println(aaa);
     }
 }

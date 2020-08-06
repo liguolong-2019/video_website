@@ -7,6 +7,7 @@ import com.cqupt.demo.Bean.Movie;
 import com.cqupt.demo.Bean.User;
 import com.cqupt.demo.Service.AdminService;
 import com.cqupt.demo.Service.MovieService;
+import com.cqupt.demo.Service.RoomService;
 import com.cqupt.demo.Service.UserService;
 import com.cqupt.demo.utils.PathUtil;
 import com.cqupt.demo.utils.UserUtil;
@@ -39,6 +40,9 @@ public class ApiController {
 
     @Resource
     private AdminService adminService;
+
+    @Resource
+    private RoomService roomService;
 
     @Resource
     JavaMailSenderImpl mailSender;
@@ -251,5 +255,41 @@ public class ApiController {
         return modelMap;
 
 
+    }
+
+    /**
+     * 创建公共房间
+     * @param map
+     * @param session
+     * @return
+     */
+    @PostMapping("/public")
+    public JSONObject creatPublicRoom(@RequestBody Map map,HttpSession session){
+        User loginUser = (User) session.getAttribute("loginUser");
+        String  roomName = (String) map.get("roomName");
+        String  movieName = (String) map.get("movieName");
+        return roomService.creatPublicRoom(roomName,movieName,loginUser.getUserId());
+    }
+
+
+    /**
+     * 进入公共房间
+     * @param roomId
+     * @param session
+     * @return
+     */
+    @GetMapping("/enterpublic")
+    public JSONObject enterPublicRoom(@RequestParam Integer roomId,HttpSession session){
+        JSONObject jsonObject = roomService.enterPublicRoom(roomId);
+        return jsonObject;
+    }
+
+    /**
+     * 显示全部房间
+     * @return
+     */
+    @GetMapping("/rooms")
+    public JSONObject rooms(){
+        return roomService.rooms();
     }
 }

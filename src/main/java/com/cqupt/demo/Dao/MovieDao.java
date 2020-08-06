@@ -12,6 +12,8 @@ public interface MovieDao {
 
     Movie queryById(@Param("movieId") Integer movieId);
 
+    Movie queryByName(@Param("movieName")String movieName);
+
     int insertMovie(Movie movie);
 
     int deleteMovie(@Param("movieId") Integer movieId);

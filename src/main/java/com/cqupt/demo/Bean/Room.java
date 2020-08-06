@@ -3,30 +3,10 @@ package com.cqupt.demo.Bean;
 public class Room {
     private Integer roomId;
     private String roomName;
-    private Movie movie;
-    private User user;
+    private Integer movieId;
+    private Integer userId;
     private String password;
     private String type;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Room() {
-
-    }
-    public Room(Integer roomId, String roomName, Movie movie, User user, String password,String type) {
-        this.roomId = roomId;
-        this.roomName = roomName;
-        this.movie = movie;
-        this.user = user;
-        this.password = password;
-        this.type=type;
-    }
 
     public Integer getRoomId() {
         return roomId;
@@ -44,20 +24,20 @@ public class Room {
         this.roomName = roomName;
     }
 
-    public Movie getMovie() {
-        return movie;
+    public Integer getMovieId() {
+        return movieId;
     }
 
-    public void setMovie(Movie movie) {
-        this.movie = movie;
+    public void setMovieId(Integer movieId) {
+        this.movieId = movieId;
     }
 
-    public User getUser() {
-        return user;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getPassword() {
@@ -66,5 +46,25 @@ public class Room {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Room() {
+    }
+
+    public Room(Integer roomId, String roomName, Integer movieId, Integer userId, String password, String type) {
+        this.roomId = roomId;
+        this.roomName = roomName;
+        this.movieId = movieId;
+        this.userId = userId;
+        this.password = password;
+        this.type = type;
     }
 }
