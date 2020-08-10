@@ -12,6 +12,10 @@
 
     </select>
 
+    <select id="queryByName" resultType="Movie">
+        select * from demo.movie where movie_name=#{movieName};
+    </select>
+
     <insert id="insertMovie" parameterType="Movie" useGeneratedKeys="true" keyColumn="movie_id" keyProperty="movieId">
         insert into demo.movie(movie_name,src,admin_id)
         values (#{movieName},#{src},#{adminId});
@@ -21,4 +25,8 @@
         delete from demo.movie where movie_id=#{movieId};
 
     </delete>
+
+    <select id="queryAll" resultType="Movie">
+        select * from demo.movie;
+    </select>
 </mapper>

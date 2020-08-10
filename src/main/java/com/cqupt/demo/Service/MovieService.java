@@ -8,6 +8,7 @@ import java.util.List;
 public interface MovieService {
     int addMovie(Movie movie);
 
+    List<Movie> queryAll();
     List<Movie> queryBy_Adid(@Param("adminId")Integer adminId);
 
     Movie getById(Integer movieId);

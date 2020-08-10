@@ -50,4 +50,14 @@ public class Movie {
     public void setSrc(String src) {
         this.src = src;
     }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "movieId=" + movieId +
+                ", movieName='" + movieName + '\'' +
+                ", src='" + src + '\'' +
+                ", adminId=" + adminId +
+                '}';
+    }
 }

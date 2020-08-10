@@ -3,10 +3,41 @@ package com.cqupt.demo.Bean;
 public class Room {
     private Integer roomId;
     private String roomName;
-    private Movie movie;
-    private User user;
+    private Integer movieId;
+    private Integer userId;
     private String password;
     private String type;
+    private Movie movie;
+    private User user;
+
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
+
+    public Room() {
+
+    }
+
+    public Room(Integer roomId, String roomName, Integer movieId, Integer userId, String password, String type) {
+        this.roomId = roomId;
+        this.roomName = roomName;
+        this.movieId = movieId;
+        this.userId = userId;
+        this.password = password;
+        this.type = type;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getType() {
         return type;
@@ -16,16 +47,20 @@ public class Room {
         this.type = type;
     }
 
-    public Room() {
-
+    public Integer getMovieId() {
+        return movieId;
     }
-    public Room(Integer roomId, String roomName, Movie movie, User user, String password,String type) {
-        this.roomId = roomId;
-        this.roomName = roomName;
-        this.movie = movie;
-        this.user = user;
-        this.password = password;
-        this.type=type;
+
+    public void setMovieId(Integer movieId) {
+        this.movieId = movieId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getRoomId() {
@@ -44,21 +79,6 @@ public class Room {
         this.roomName = roomName;
     }
 
-    public Movie getMovie() {
-        return movie;
-    }
-
-    public void setMovie(Movie movie) {
-        this.movie = movie;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public String getPassword() {
         return password;
@@ -66,5 +86,18 @@ public class Room {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "roomId=" + roomId +
+                ", roomName='" + roomName + '\'' +
+                ", movieId=" + movieId +
+                ", userId=" + userId +
+                ", password='" + password + '\'' +
+                ", type='" + type + '\'' +
+                ", movie=" + movie +
+                '}';
     }
 }
