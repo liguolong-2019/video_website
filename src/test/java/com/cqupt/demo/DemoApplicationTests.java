@@ -9,20 +9,21 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @SpringBootTest
 @MapperScan("com.cqupt.demo")
 class DemoApplicationTests {
 
-    @Resource
-    private UserDao userDao;
+
     @Resource
     private RoomDao roomDao;
+    @Resource
+    private UserDao userDao;
     @Test
     void contextLoads() {
-        System.out.println(userDao.selectAll());
-        int i = userDao.insertUser(new User(2, "zlw", 19, "143", "password"));
-        System.out.println(i);
+        List<Room> rooms = roomDao.allRooms();
+        System.out.println(rooms);
     }
 
     @Test
@@ -36,9 +37,8 @@ class DemoApplicationTests {
     }
 
     @Test
-    void da(){
-       // roomDao.creatPublicRoom("liguolong",2,3);
-        Room aaa = roomDao.queryRoomByName("aaa");
-        System.out.println(aaa);
+    public void test01() {
+        Room room = roomDao.queryById(1);
+        System.out.println(room);
     }
 }

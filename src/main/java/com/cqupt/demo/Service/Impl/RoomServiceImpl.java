@@ -7,7 +7,6 @@ import com.cqupt.demo.Dao.MovieDao;
 import com.cqupt.demo.Dao.RoomDao;
 import com.cqupt.demo.Service.RoomService;
 import org.springframework.stereotype.Service;
-import sun.nio.cs.ext.MS874;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -15,19 +14,32 @@ import java.util.List;
 
 @Service
 public class RoomServiceImpl  implements RoomService {
+
     @Resource
-    RoomDao roomDao;
+    private RoomDao roomDao;
     @Resource
-    MovieDao movieDao;
+    private MovieDao movieDao;
+
+
     @Override
-    public JSONObject creatPublicRoom(String roomName, String movieName,Integer userId) {
+    public Room queryPri(Integer movieId, String password) {
+        return roomDao.queryPri(movieId, password);
+    }
+
+    @Override
+    public int addPriRoom(Room room) {
+        return roomDao.insertRoom(room);
+    }
+
+    @Override
+    public JSONObject creatPublicRoom(String roomName, Integer movieId, Integer userId) {
         boolean success;
         String Msg;
         JSONObject result=new JSONObject();
         JSONObject data=new JSONObject();
         JSONObject roomInfo=new JSONObject();
         Room room = roomDao.queryRoomByName(roomName);
-        Movie movie = movieDao.queryByName(movieName);
+        Movie movie =movieDao.queryById(movieId);
         if (movie==null||room!=null){
             success=false;
             Msg="电影不存在或房间名已存在";

@@ -4,6 +4,7 @@ package com.cqupt.demo.Controller;
 import com.alibaba.fastjson.JSONObject;
 import com.cqupt.demo.Bean.Admin;
 import com.cqupt.demo.Bean.Movie;
+import com.cqupt.demo.Bean.Room;
 import com.cqupt.demo.Bean.User;
 import com.cqupt.demo.Service.AdminService;
 import com.cqupt.demo.Service.MovieService;
@@ -39,10 +40,10 @@ public class ApiController {
     private MovieService movieService;
 
     @Resource
-    private AdminService adminService;
+    private RoomService roomService;
 
     @Resource
-    private RoomService roomService;
+    private AdminService adminService;
 
     @Resource
     JavaMailSenderImpl mailSender;
@@ -113,14 +114,15 @@ public class ApiController {
 
     /**
      * 普通用户登录
-     * @param map
+     * @param
      * @param request
      * @return
      */
     @PostMapping("/login")
-    public JSONObject login( @RequestBody Map map ,HttpServletRequest request){
-        String userName = (String) map.get("userName");
-        String password = (String) map.get("password");
+    public JSONObject login( @RequestBody User user,HttpServletRequest request){
+
+        String userName = user.getUserName();
+        String password = user.getPassword();
         HttpSession session = request.getSession(true);
         return userService.login(userName, password, session);
     }
@@ -172,8 +174,8 @@ public class ApiController {
     @PostMapping("/upload")
     public Map<String, Object> addMovie(@RequestParam("file") MultipartFile file, @RequestParam("movieName") String movieName, HttpSession session) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
-       Admin admin = (Admin) session.getAttribute("loginAdmin");
-//         Admin admin = new Admin(2,"z","123456");
+        Admin admin = (Admin) session.getAttribute("loginAdmin");
+//        Admin admin = new Admin(2,"z","123456");
         if (!file.isEmpty() && movieName != null) {
             Movie movie = new Movie();
             String basePath = PathUtil.getMovieBasePath();
@@ -182,8 +184,10 @@ public class ApiController {
             String fileName = PathUtil.getRandomFileName(suffix);
             movie.setMovieName(movieName);
             movie.setAdminId(admin.getAdminId());
-            movie.setSrc(basePath + fileName);
+            movie.setSrc("http://47.97.214.211:8080/movie/" + fileName);
             File filepath = new File(basePath, fileName);
+//            List<Movie> movies = movieService.queryBy_Adid(admin.getAdminId());
+
             if (!filepath.exists()) {
                 filepath.getParentFile().mkdirs();
             }
@@ -237,23 +241,84 @@ public class ApiController {
      */
     @GetMapping("/movies")
     public Map<String, Object> getMovies(HttpSession session) {
-       Admin admin = (Admin) session.getAttribute("loginAdmin");
-//         Admin admin=new Admin(2,"dxy","123456");
+        Admin admin = (Admin) session.getAttribute("loginAdmin");
+        User user = (User) session.getAttribute("loginUser");
+//        Admin admin=new Admin(2,"dxy","123456");
         Map<String, Object> modelMap = new HashMap<String, Object>();
         List<Movie> movies = new ArrayList<Movie>();
+       if(admin!=null) {
+           try {
+               movies = movieService.queryBy_Adid(admin.getAdminId());
+               Map<String, Object> temp = new HashMap<String, Object>();
+               temp.put("movieList", movies);
+               modelMap.put("success", true);
+               modelMap.put("data", temp);
+           } catch (Exception e) {
+               modelMap.put("success", false);
+               modelMap.put("errMsg", e.getMessage());
+           }
+       }else if (user!=null){
+           try {
+               movies = movieService.queryAll();
+               Map<String, Object> temp = new HashMap<String, Object>();
+               temp.put("movieList", movies);
+               modelMap.put("success", true);
+               modelMap.put("data", temp);
+           }catch (Exception e){
+               modelMap.put("success", false);
+               modelMap.put("errMsg", e.getMessage());
+           }
+       }
+        return modelMap;
+    }
+
+    /**
+     * 创建私密房间
+     * @param session
+     * @param room
+     * @return
+     */
+    @PostMapping("/private")
+    public Map<String, Object> createPri(HttpSession session, @RequestBody Room room) {
+        Map<String, Object> modelMap = new HashMap<String, Object>();
         try {
-            movies = movieService.queryBy_Adid(admin.getAdminId());
             Map<String, Object> temp = new HashMap<String, Object>();
-            temp.put("movieList", movies);
-            modelMap.put("success", true);
+            User user = (User) session.getAttribute("loginUser");
+            room.setUserId(user.getUserId());
+            Movie movie = movieService.getById(room.getMovieId());
+            roomService.addPriRoom(room);
+            temp.put("room", room);
+            temp.put("movie", movie);
             modelMap.put("data", temp);
+            modelMap.put("success", true);
+            modelMap.put("Msg", "创建成功");
         } catch (Exception e) {
             modelMap.put("success", false);
-            modelMap.put("errMsg", e.getMessage());
+            modelMap.put("Msg", "创建失败" + e.getMessage());
         }
-
         return modelMap;
+    }
 
+
+    @PostMapping("/enterprivate")
+    public Map<String, Object> enterPri(@RequestBody Map<String,Object> map) {
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        Integer roomId = (Integer) map.get("roomId");
+        String password = (String) map.get("password");
+        Room room=roomService.queryPri(roomId, password);
+        if (room != null) {
+            Movie movie = movieService.getById(room.getMovieId());
+            Map<String, Object> temp = new HashMap<String, Object>();
+            modelMap.put("success", true);
+            temp.put("room", room);
+            temp.put("movie", movie);
+            modelMap.put("data", temp);
+
+        }else {
+            modelMap.put("success", false);
+            modelMap.put("Msg", "密码错误");
+        }
+        return modelMap;
 
     }
 
@@ -267,10 +332,9 @@ public class ApiController {
     public JSONObject creatPublicRoom(@RequestBody Map map,HttpSession session){
         User loginUser = (User) session.getAttribute("loginUser");
         String  roomName = (String) map.get("roomName");
-        String  movieName = (String) map.get("movieName");
-        return roomService.creatPublicRoom(roomName,movieName,loginUser.getUserId());
+        Integer  movieId = (Integer) map.get("movieId");
+        return roomService.creatPublicRoom(roomName,movieId,loginUser.getUserId());
     }
-
 
     /**
      * 进入公共房间

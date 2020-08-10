@@ -11,6 +11,7 @@
         select * from demo.movie where movie_id=#{movieId};
 
     </select>
+
     <select id="queryByName" resultType="Movie">
         select * from demo.movie where movie_name=#{movieName};
     </select>
@@ -24,4 +25,8 @@
         delete from demo.movie where movie_id=#{movieId};
 
     </delete>
+
+    <select id="queryAll" resultType="Movie">
+        select * from demo.movie;
+    </select>
 </mapper>

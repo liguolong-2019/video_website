@@ -19,6 +19,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public List<Movie> queryAll() {
+        return movieDao.queryAll();
+    }
+
+    @Override
     public List<Movie> queryBy_Adid(Integer adminId) {
         return movieDao.queryBy_Adid(adminId);
     }

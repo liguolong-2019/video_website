@@ -3,6 +3,63 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqupt.demo.Dao.RoomDao">
 
+    <resultMap id="room" type="Room">
+        <id property="roomId" column="room_id" javaType="Integer"/>
+        <result property="roomName" column="room_name" javaType="String"/>
+        <result property="password" column="password" javaType="String"/>
+        <result property="type" column="type" javaType="String"/>
+        <result property="userId" column="user_id" javaType="Integer"/>
+        <result property="movieId" column="movie_id" javaType="Integer"/>
+    </resultMap>
+
+    <resultMap id="room1" type="Room">
+        <id property="roomId" column="room_id" javaType="Integer"/>
+        <result property="roomName" column="room_name" javaType="String"/>
+        <result property="password" column="password" javaType="String"/>
+        <result property="type" column="type" javaType="String"/>
+        <association property="movie" column="movie_id" javaType="com.cqupt.demo.Bean.Movie">
+            <id property="movieId" column="movie_id"/>
+            <result property="movieName" column="movie_name"/>
+            <result property="src" column="src"/>
+            <result property="adminId" column="admin_id"/>
+        </association>
+        <association property="user" column="user_id" javaType="com.cqupt.demo.Bean.User">
+            <id property="userId" column="user_id"/>
+            <result property="userName" column="user_name"/>
+            <result property="age" column="age"/>
+            <result property="email" column="email"/>
+            <result property="password" column="password"/>
+        </association>
+    </resultMap>
+
+    <select id="queryById" resultMap="room" >
+        select
+        r.room_id,
+        r.room_name,
+        r.type,
+        r.password,
+        r.movie_id,
+        r.user_id
+        from demo.room as r
+        where r.room_id=#{roomId}
+    </select>
+
+    <select id="queryPri" resultMap="room">
+        select
+        r.room_id,
+        r.room_name,
+        r.type,
+        r.password,
+        r.movie_id,
+        r.user_id
+        from demo.room as r
+        where r.room_id=#{roomId} and r.password=#{password}
+    </select>
+    <insert id="insertRoom" parameterType="Room" useGeneratedKeys="true" keyProperty="roomId" keyColumn="room_id">
+        insert into demo.room(room_name,movie_id,user_id,password,type)
+        values (#{roomName},#{movieId},#{userId},#{password},#{type})
+    </insert>
+
     <insert id="creatPublicRoom">
         insert into demo.room(room_name,movie_id,user_id,type)
         values (#{roomName},#{movieId},#{userId},'公共')
@@ -13,9 +70,27 @@
     <select id="queryRoomById" resultType="Room">
         select * from demo.room where room_id=#{roomId};
     </select>
-    <select id="allRooms" resultType="Room">
-        select * from demo.room
+    <select id="allRooms" resultMap="room1">
+        select
+        r.room_id,
+        r.room_name,
+        r.type,
+        r.password,
+        r.user_id,
+        r.movie_id,
+        m.movie_id,
+        m.movie_name,
+        m.src,
+        m.admin_id,
+        u.user_id,
+        u.user_name,
+        u.age,
+        u.email,
+        u.password
+        from demo.room as r ,demo.movie as m,demo.user as u
+        where
+        r.movie_id=m.movie_id
+        and
+        r.user_id=u.user_id
     </select>
-
-
 </mapper>

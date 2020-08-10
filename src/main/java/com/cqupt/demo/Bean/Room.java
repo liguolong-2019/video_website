@@ -7,21 +7,44 @@ public class Room {
     private Integer userId;
     private String password;
     private String type;
+    private Movie movie;
+    private User user;
 
-    public Integer getRoomId() {
-        return roomId;
+    public Movie getMovie() {
+        return movie;
     }
 
-    public void setRoomId(Integer roomId) {
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
+
+    public Room() {
+
+    }
+
+    public Room(Integer roomId, String roomName, Integer movieId, Integer userId, String password, String type) {
         this.roomId = roomId;
-    }
-
-    public String getRoomName() {
-        return roomName;
-    }
-
-    public void setRoomName(String roomName) {
         this.roomName = roomName;
+        this.movieId = movieId;
+        this.userId = userId;
+        this.password = password;
+        this.type = type;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Integer getMovieId() {
@@ -40,6 +63,23 @@ public class Room {
         this.userId = userId;
     }
 
+    public Integer getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+
     public String getPassword() {
         return password;
     }
@@ -48,23 +88,16 @@ public class Room {
         this.password = password;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Room() {
-    }
-
-    public Room(Integer roomId, String roomName, Integer movieId, Integer userId, String password, String type) {
-        this.roomId = roomId;
-        this.roomName = roomName;
-        this.movieId = movieId;
-        this.userId = userId;
-        this.password = password;
-        this.type = type;
+    @Override
+    public String toString() {
+        return "Room{" +
+                "roomId=" + roomId +
+                ", roomName='" + roomName + '\'' +
+                ", movieId=" + movieId +
+                ", userId=" + userId +
+                ", password='" + password + '\'' +
+                ", type='" + type + '\'' +
+                ", movie=" + movie +
+                '}';
     }
 }
