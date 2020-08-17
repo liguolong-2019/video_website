@@ -354,6 +354,19 @@ public class ApiController {
      */
     @GetMapping("/rooms")
     public JSONObject rooms(){
-        return roomService.rooms();
+        boolean success;
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        List<Room> rooms;
+        try{
+            rooms=roomService.rooms();
+            success=true;
+            data.put("roomList",rooms);
+        }catch (Exception e){
+            success=false;
+        }
+        result.put("success",success);
+        result.put("data",data);
+        return result;
     }
 }

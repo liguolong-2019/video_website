@@ -9,7 +9,6 @@ import com.cqupt.demo.Service.RoomService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -86,21 +85,7 @@ public class RoomServiceImpl  implements RoomService {
     }
 
     @Override
-    public JSONObject rooms() {
-        boolean success;
-        JSONObject result=new JSONObject();
-        JSONObject data=new JSONObject();
-        List<Room> rooms = new ArrayList<Room>();
-
-        try{
-            rooms=roomDao.allRooms();
-            success=true;
-            data.put("roomList",rooms);
-        }catch (Exception e){
-            success=false;
-        }
-        result.put("success",success);
-        result.put("data",data);
-        return result;
+    public List<Room> rooms() {
+        return roomDao.allRooms();
     }
 }
