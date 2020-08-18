@@ -93,4 +93,8 @@
         and
         r.user_id=u.user_id
     </select>
+
+    <delete id="deleteRoom" parameterType="Integer">
+        delete from demo.room where room_id=#{roomId}
+    </delete>
 </mapper>

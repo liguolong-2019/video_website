@@ -23,6 +23,8 @@ public interface RoomDao {
 
     int insertRoom(Room room);
 
+    int deleteRoom(@Param("roomId") Integer roomId);
+
 
 
 }

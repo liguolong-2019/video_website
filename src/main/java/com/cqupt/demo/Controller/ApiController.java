@@ -184,7 +184,7 @@ public class ApiController {
             String fileName = PathUtil.getRandomFileName(suffix);
             movie.setMovieName(movieName);
             movie.setAdminId(admin.getAdminId());
-            movie.setSrc("http://47.97.214.211:8080/movie/" + fileName);
+            movie.setSrc("https://47.97.214.211/movie/" + fileName);
             File filepath = new File(basePath, fileName);
 //            List<Movie> movies = movieService.queryBy_Adid(admin.getAdminId());
 
@@ -221,8 +221,13 @@ public class ApiController {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         Movie movie = movieService.getById(movieId);
         File file = new File(movie.getSrc());
-        file.delete();
-        int removeMovie = movieService.removeMovie(movieId);
+        int removeMovie=0;
+        try {
+            removeMovie = movieService.removeMovie(movieId);
+            file.delete();
+        } catch (Exception e) {
+            modelMap.put("Msg", "电影正在播放，无法删除");
+        }
         if (removeMovie == 1) {
             modelMap.put("Msg", "删除成功");
             modelMap.put("success", true);
@@ -287,8 +292,8 @@ public class ApiController {
             room.setUserId(user.getUserId());
             Movie movie = movieService.getById(room.getMovieId());
             roomService.addPriRoom(room);
+            room.setMovie(movie);
             temp.put("room", room);
-            temp.put("movie", movie);
             modelMap.put("data", temp);
             modelMap.put("success", true);
             modelMap.put("Msg", "创建成功");
@@ -299,7 +304,11 @@ public class ApiController {
         return modelMap;
     }
 
-
+    /**
+     * 进入私密房间
+     * @param map
+     * @return
+     */
     @PostMapping("/enterprivate")
     public Map<String, Object> enterPri(@RequestBody Map<String,Object> map) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -310,8 +319,9 @@ public class ApiController {
             Movie movie = movieService.getById(room.getMovieId());
             Map<String, Object> temp = new HashMap<String, Object>();
             modelMap.put("success", true);
+            room.setMovie(movie);
             temp.put("room", room);
-            temp.put("movie", movie);
+//            temp.put("movie", movie);
             modelMap.put("data", temp);
 
         }else {
@@ -352,8 +362,50 @@ public class ApiController {
      * 显示全部房间
      * @return
      */
+//    @GetMapping("/rooms")
+//    public JSONObject rooms(){
+//        return roomService.rooms();
+//    }
     @GetMapping("/rooms")
     public JSONObject rooms(){
-        return roomService.rooms();
+        boolean success;
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        List<Room> rooms;
+        try{
+            rooms=roomService.rooms();
+            success=true;
+            data.put("roomList",rooms);
+        }catch (Exception e){
+            success=false;
+        }
+        result.put("success",success);
+        result.put("data",data);
+        return result;
+    }
+
+
+    /**
+     * 解散房间
+     * @param map
+     * @return
+     */
+    @GetMapping("/deleteRoom")
+    public Map<String, Object> removeRoom(@RequestBody Map<String,Integer> map) {
+        Integer roomId = map.get("roomId");
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        if (roomId != 0) {
+            int i = roomService.removeRoom(roomId);
+            if (i <= 0) {
+                modelMap.put("success", false);
+                modelMap.put("Msg", "房间解散失败");
+
+            }else{
+                modelMap.put("success", true);
+                modelMap.put("Msg", "房间已解散");
+            }
+        }
+        return modelMap;
+
     }
 }
