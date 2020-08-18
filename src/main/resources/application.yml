@@ -11,8 +11,8 @@ spring:
     password: AaAa123!
     initialization-mode: always
   mail:
-    username: xxxxx@qq.com
-    password: xxxxx
+    username: xxx@qq.com
+    password: xxxxxx
     host: smtp.qq.com
     port: 465
     default-encoding: UTF-8
@@ -29,6 +29,5 @@ server:
     key-store-type: PKCS12
     enabled: true
     key-store-password: E73e3Ec4
-
 
 

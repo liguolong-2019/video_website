@@ -26,5 +26,4 @@ public interface RoomDao {
     int deleteRoom(@Param("roomId") Integer roomId);
 
 
-
 }

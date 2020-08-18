@@ -9,7 +9,6 @@ import com.cqupt.demo.Service.RoomService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -85,15 +84,13 @@ public class RoomServiceImpl  implements RoomService {
         return result;
     }
 
-    @Override
-//
-    public List<Room> rooms() {
-        return roomDao.allRooms();
-    }
 
     @Override
     public int removeRoom(Integer roomId) {
         return roomDao.deleteRoom(roomId);
     }
 
+    public List<Room> rooms() {
+        return roomDao.allRooms();
+    }
 }

@@ -7,13 +7,10 @@ import java.util.List;
 
 public interface RoomService {
     Room queryPri(Integer movieId, String password);
-
     int addPriRoom(Room room);
-
     JSONObject creatPublicRoom(String roomName, Integer movieId, Integer userId);
     JSONObject enterPublicRoom(Integer roomId);
-//    JSONObject rooms();
-
     List<Room> rooms();
     int removeRoom(Integer roomId);
+
 }

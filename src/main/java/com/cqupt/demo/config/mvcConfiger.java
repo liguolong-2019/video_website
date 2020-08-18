@@ -22,16 +22,6 @@ public class mvcConfiger implements WebMvcConfigurer {
         registry.addResourceHandler("/movie/**").addResourceLocations("file:/home/ray/movie/");
     }
 
-//        @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedHeaders("*")
-//                .allowedMethods("GET","POST","PUT","DELETE")
-//                .allowedOrigins("*")
-//                .allowCredentials(true)
-//                .exposedHeaders("token")
-//                .maxAge(3600);
-//
-//    }
+
 
 }
