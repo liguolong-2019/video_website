@@ -387,12 +387,11 @@ public class ApiController {
     }
     /**
      * 解散房间
-     * @param map
+     * @param roomId
      * @return
      */
     @GetMapping("/deleteRoom")
-    public Map<String, Object> removeRoom(@RequestBody Map<String,Integer> map) {
-        Integer roomId = map.get("roomId");
+    public Map<String, Object> removeRoom(@RequestParam Integer roomId) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         if (roomId != 0) {
             int i = roomService.removeRoom(roomId);
