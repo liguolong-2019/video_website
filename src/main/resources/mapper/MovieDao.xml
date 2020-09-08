@@ -23,10 +23,13 @@
 
     <delete id="deleteMovie">
         delete from demo.movie where movie_id=#{movieId};
-
     </delete>
 
     <select id="queryAll" resultType="Movie">
         select * from demo.movie;
     </select>
+
+    <update id="updateMovie" parameterType="Movie">
+        update demo.movie set src=#{src} where movie_id=#{movieId};
+    </update>
 </mapper>

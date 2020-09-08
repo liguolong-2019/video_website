@@ -9,6 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface MovieDao {
+
     List<Movie> queryBy_Adid(@Param("adminId")Integer adminId);
 
     List<Movie> queryAll();
@@ -20,4 +21,7 @@ public interface MovieDao {
     int insertMovie(Movie movie);
 
     int deleteMovie(@Param("movieId") Integer movieId);
+
+    int updateMovie(Movie movie);
+
 }

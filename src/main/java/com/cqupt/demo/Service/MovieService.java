@@ -15,4 +15,7 @@ public interface MovieService {
 
 
     int removeMovie(Integer movieId);
+
+
+    int updateMovie(Movie movie);
 }

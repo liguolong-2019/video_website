@@ -34,4 +34,11 @@ public class PathUtil {
         String nowTimeStr = sDateFormat.format(new Date());
         return nowTimeStr + rannum+suffix;
     }
+
+
+//    public static String getFileNamePrefix() {
+//        int rannum=r.nextInt(89999)+10000;
+//        String nowTimeStr = sDateFormat.format(new Date());
+//        return nowTimeStr + rannum;
+//    }
 }

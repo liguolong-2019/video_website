@@ -10,6 +10,8 @@ import com.cqupt.demo.Service.AdminService;
 import com.cqupt.demo.Service.MovieService;
 import com.cqupt.demo.Service.RoomService;
 import com.cqupt.demo.Service.UserService;
+import com.cqupt.demo.utils.FfmpegImpl;
+import com.cqupt.demo.utils.FfmpegUtil;
 import com.cqupt.demo.utils.PathUtil;
 import com.cqupt.demo.utils.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -64,19 +68,24 @@ public class ApiController {
                 modelMap.put("Msg", "用户名已注册");
                 return modelMap;
             }
-            if (userService.addUser(user) == 1) {
-                SimpleMailMessage message = new SimpleMailMessage();
-                message.setSubject("welcome to video system !!!!");
-                String text = "恭喜你注册成功\n你的账号为:" + user.getUserName() + "\n" + "密码为:" + user.getPassword();
-                message.setText(text);
-                message.setTo(user.getEmail());
-                message.setFrom(mailSender.getUsername());
-                mailSender.send(message);
-                modelMap.put("success", true);
-                modelMap.put("Msg", "注册成功");
-            } else {
-                modelMap.put("Msg", "用户注册失败");
-            }
+                try {
+                    SimpleMailMessage message = new SimpleMailMessage();
+                    message.setSubject("welcome to video system !!!!");
+                    String text = "恭喜你注册成功\n你的账号为:" + user.getUserName() + "\n" + "密码为:" + user.getPassword();
+                    message.setText(text);
+                    message.setTo(user.getEmail());
+                    message.setFrom(mailSender.getUsername());
+                    mailSender.send(message);
+                    if (userService.addUser(user) == 1) {
+                        modelMap.put("success", true);
+                        modelMap.put("Msg", "注册成功");
+                    }else {
+                        modelMap.put("Msg", "注册失败");
+                    }
+                } catch (Exception e) {
+                    modelMap.put("Msg", "请确定邮箱是否有效");
+                }
+
         } else {
             modelMap.put("success", false);
             modelMap.put("Msg", "用户信息不能为空,请重新输入");
@@ -169,6 +178,7 @@ public class ApiController {
         return editing;
     }
 
+
     /**
      * 上传影片
      *
@@ -181,7 +191,6 @@ public class ApiController {
     public Map<String, Object> addMovie(@RequestParam("file") MultipartFile file, @RequestParam("movieName") String movieName, HttpSession session) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         Admin admin = (Admin) session.getAttribute("loginAdmin");
-//        Admin admin = new Admin(2,"z","123456");
         if (!file.isEmpty() && movieName != null) {
             Movie movie = new Movie();
             String basePath = PathUtil.getMovieBasePath();
@@ -190,10 +199,8 @@ public class ApiController {
             String fileName = PathUtil.getRandomFileName(suffix);
             movie.setMovieName(movieName);
             movie.setAdminId(admin.getAdminId());
-            movie.setSrc("https://47.97.214.211/movie/" + fileName);
+            movie.setSrc("http://47.97.214.211:81/hls" + File.separator +fileName);
             File filepath = new File(basePath, fileName);
-//            List<Movie> movies = movieService.queryBy_Adid(admin.getAdminId());
-
             if (!filepath.exists()) {
                 filepath.getParentFile().mkdirs();
             }
@@ -256,7 +263,6 @@ public class ApiController {
     public Map<String, Object> getMovies(HttpSession session) {
         Admin admin = (Admin) session.getAttribute("loginAdmin");
         User user = (User) session.getAttribute("loginUser");
-//        Admin admin=new Admin(2,"dxy","123456");
         Map<String, Object> modelMap = new HashMap<String, Object>();
         List<Movie> movies = new ArrayList<Movie>();
         if (admin != null) {
@@ -300,10 +306,17 @@ public class ApiController {
             User user = (User) session.getAttribute("loginUser");
             room.setUserId(user.getUserId());
             Movie movie = movieService.getById(room.getMovieId());
+            String movieSrc=movie.getSrc();
+//            String fileName = movieSrc.substring(movieSrc.lastIndexOf("/"));
+            String fileName = FfmpegImpl.getFileName(movieSrc);
+//            FfmpegUtil.pushVideoAsRTSP("/home/ray/movie", fileName,room.getRoomName());
+            FfmpegImpl.pushStream(room.getRoomName(), fileName);
+//            String prefixMovieSrc = movieSrc.substring(0, movieSrc.lastIndexOf("/"));
+            String prefixMovieSrc = FfmpegImpl.getPrefixMovieSrc(movieSrc);
+            movie.setSrc(prefixMovieSrc + File.separator+room.getRoomName() + ".m3u8");
             roomService.addPriRoom(room);
             room.setMovie(movie);
             temp.put("room", room);
-
             modelMap.put("data", temp);
             modelMap.put("success", true);
             modelMap.put("Msg", "创建成功");
@@ -328,11 +341,14 @@ public class ApiController {
         Room room = roomService.queryPri(roomId, password);
         if (room != null) {
             Movie movie = movieService.getById(room.getMovieId());
+            String src = movie.getSrc();
+            String roomName = room.getRoomName();
+            String movieSrc = src.substring(0, src.lastIndexOf("/")) + roomName + ".m3u8";
+            movie.setSrc(movieSrc);
             Map<String, Object> temp = new HashMap<String, Object>();
             modelMap.put("success", true);
             room.setMovie(movie);
             temp.put("room", room);
-//            temp.put("movie", movie);
             modelMap.put("data", temp);
 
         }
@@ -407,4 +423,13 @@ public class ApiController {
         return modelMap;
 
     }
+
+    @GetMapping("/change-username")
+    public String readCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("username", "ray");
+        cookie.setSecure(false);
+        response.addCookie(cookie);
+        return "Username is changed";
+    }
+
 }
