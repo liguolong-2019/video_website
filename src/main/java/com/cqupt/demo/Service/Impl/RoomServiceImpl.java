@@ -53,7 +53,7 @@ public class RoomServiceImpl  implements RoomService {
             String fileName = FfmpegImpl.getFileName(movie.getSrc());
             FfmpegImpl.pushStream(roomName, fileName);
             String prefixMovieSrc = FfmpegImpl.getPrefixMovieSrc(movie.getSrc());
-            movie.setSrc(prefixMovieSrc + File.separator+roomName + ".m3u8");
+            movie.setSrc(prefixMovieSrc + File.separator+roomName);
             roomInfo.put("movie",movie);
             roomInfo.put("roomId",newRoom.getRoomId());
             roomInfo.put("roomName",newRoom.getRoomName());
@@ -76,8 +76,8 @@ public class RoomServiceImpl  implements RoomService {
         if (room!=null){
             Movie movie = movieDao.queryById(room.getMovieId());
             String src = movie.getSrc();
-            String roomName = movie.getMovieName();
-            String movieSrc = src.substring(0, src.lastIndexOf("/")) + roomName + ".m3u8";
+            String roomName = room.getRoomName();
+            String movieSrc = src.substring(0, src.lastIndexOf("/")) +File.separator+ roomName;
             movie.setSrc(movieSrc);
             success=true;
             roomInfo.put("roomName",room.getRoomId());

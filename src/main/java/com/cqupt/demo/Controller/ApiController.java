@@ -199,7 +199,7 @@ public class ApiController {
             String fileName = PathUtil.getRandomFileName(suffix);
             movie.setMovieName(movieName);
             movie.setAdminId(admin.getAdminId());
-            movie.setSrc("http://47.97.214.211:81/hls" + File.separator +fileName);
+            movie.setSrc("rtmp://47.97.214.211:1935/myapp" + File.separator +fileName);
             File filepath = new File(basePath, fileName);
             if (!filepath.exists()) {
                 filepath.getParentFile().mkdirs();
@@ -307,13 +307,10 @@ public class ApiController {
             room.setUserId(user.getUserId());
             Movie movie = movieService.getById(room.getMovieId());
             String movieSrc=movie.getSrc();
-//            String fileName = movieSrc.substring(movieSrc.lastIndexOf("/"));
             String fileName = FfmpegImpl.getFileName(movieSrc);
-//            FfmpegUtil.pushVideoAsRTSP("/home/ray/movie", fileName,room.getRoomName());
             FfmpegImpl.pushStream(room.getRoomName(), fileName);
-//            String prefixMovieSrc = movieSrc.substring(0, movieSrc.lastIndexOf("/"));
             String prefixMovieSrc = FfmpegImpl.getPrefixMovieSrc(movieSrc);
-            movie.setSrc(prefixMovieSrc + File.separator+room.getRoomName() + ".m3u8");
+            movie.setSrc(prefixMovieSrc + File.separator+room.getRoomName());
             roomService.addPriRoom(room);
             room.setMovie(movie);
             temp.put("room", room);
@@ -334,7 +331,10 @@ public class ApiController {
      * @return
      */
     @PostMapping("/enterprivate")
-    public Map<String, Object> enterPri(@RequestBody Map<String, Object> map) {
+    public Map<String, Object> enterPri(@RequestBody Map<String, Object> map, HttpServletRequest request) {
+        System.out.println(request.getServletPath());
+        System.out.println(request.getContextPath());
+
         Map<String, Object> modelMap = new HashMap<String, Object>();
         Integer roomId = (Integer) map.get("roomId");
         String password = (String) map.get("password");
@@ -343,7 +343,7 @@ public class ApiController {
             Movie movie = movieService.getById(room.getMovieId());
             String src = movie.getSrc();
             String roomName = room.getRoomName();
-            String movieSrc = src.substring(0, src.lastIndexOf("/")) + roomName + ".m3u8";
+            String movieSrc = src.substring(0, src.lastIndexOf("/")) + File.separator + roomName ;
             movie.setSrc(movieSrc);
             Map<String, Object> temp = new HashMap<String, Object>();
             modelMap.put("success", true);
@@ -431,5 +431,7 @@ public class ApiController {
         response.addCookie(cookie);
         return "Username is changed";
     }
+
+
 
 }

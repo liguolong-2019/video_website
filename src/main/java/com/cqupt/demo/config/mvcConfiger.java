@@ -13,7 +13,7 @@ public class mvcConfiger implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new loginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns("/api/login","/api/adlogin","/error/**","/api/user","/api/admin");
+        registry.addInterceptor(new loginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns("/api/login","/api/adlogin","/error/**","/api/user","/api/admin","/hls/**");
         registry.addInterceptor(new powerHanlerInterceptor()).addPathPatterns("/api/upload","/api/delete");
     }
 

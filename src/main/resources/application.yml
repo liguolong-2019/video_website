@@ -10,6 +10,7 @@ spring:
     username: root
     password: AaAa123!
     initialization-mode: always
+
   mail:
     username: 1437927944@qq.com
     password: wafupuunykcziifd
